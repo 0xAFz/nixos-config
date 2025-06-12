@@ -79,7 +79,23 @@ in
     pulse.enable = true;
   };
 
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestions.enable = true;
+    syntaxHighlighting.enable = true;
+
+    ohMyZsh = {
+      enable = true;
+      theme = "garyblessington";
+      plugins = [ "git" ];
+    };
+
+    shellAliases = {
+      ll = "ls -l";
+      update = "sudo nixos-rebuild switch";
+    };
+  };
 
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
