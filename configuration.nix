@@ -130,5 +130,14 @@ in
   google-chrome
   ];
 
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.dates = "weekly";
+
+  nix.optimise.automatic = true;
+  nix.gc.automatic = true;
+  nix.gc.dates = "daily";
+  nix.gc.options = "--delete-older-than 10d";
+  nix.settings.auto-optimise-store = true;
+
   system.stateVersion = "25.05"; 
 }
