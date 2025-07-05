@@ -1,20 +1,19 @@
 { config, pkgs, ... }:
 
 let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz";
 in
 {
-  imports =
-    [ 
-      ./hardware-configuration.nix
-      (import "${home-manager}/nixos")
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    (import "${home-manager}/nixos")
+  ];
 
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sdb";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.grub.device = "/dev/disk/by-id/ata-ADATA_SU650_2M232L2GAEYC";
+  boot.loader.grub.useOSProber = false;
 
-  boot.kernelParams = [ 
+  boot.kernelParams = [
     "quiet"
     "splash"
     "nohz=off"
@@ -30,6 +29,7 @@ in
     "apparmor=0"
     "schedstats=disable"
     "transparent_hugepage=never"
+    "intel_pstate=disable"
   ];
 
   boot.kernel.sysctl = {
@@ -51,8 +51,16 @@ in
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [ mesa ];
+  };
 
-  networking.hostName = "nixos"; 
+  services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "radeon" ];
+
+  networking.hostName = "nixos";
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   networking.networkmanager.enable = true;
@@ -60,15 +68,7 @@ in
   time.timeZone = "Asia/Tehran";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
-  services.printing.enable = true;
+  security.polkit.enable = true;
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -77,6 +77,18 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+  };
+
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraPackages = with pkgs; [
+      wayland
+      xwayland
+      mesa
+      libglvnd
+      libdrm
+    ];
   };
 
   programs.zsh = {
@@ -106,29 +118,89 @@ in
     isNormalUser = true;
     description = "cloud";
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
   };
 
   users.defaultUserShell = pkgs.zsh;
   environment.shells = with pkgs; [ zsh ];
 
-  programs.firefox.enable = true;
-
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-  vim
-  git
-  nerd-fonts.jetbrains-mono
-  zip
-  unzip
-  curl
-  jq
-  wget
-  htop
-  docker
-  google-chrome
+    vim
+    git
+    nerd-fonts.jetbrains-mono
+    zip
+    unzip
+    curl
+    jq
+    wget
+    htop
+    docker
+    google-chrome
+    xkeyboard_config
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-emoji
+    font-awesome
+    source-han-sans
+    source-han-sans-japanese
+    source-han-serif-japanese
+    vazir-fonts
+    dejavu_fonts
+    liberation_ttf
+    mesa
+    libglvnd
+    libdrm
+    xwayland
+    mesa-demos
   ];
+
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      font-awesome
+      source-han-sans
+      source-han-sans-japanese
+      source-han-serif-japanese
+      vazir-fonts
+      dejavu_fonts
+      liberation_ttf
+      nerd-fonts.jetbrains-mono
+    ];
+
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        serif = [
+          "Noto Serif"
+          "Vazir Matn"
+          "Source Han Serif"
+        ];
+        sansSerif = [
+          "Noto Sans"
+          "Vazir Matn"
+          "Source Han Sans"
+        ];
+        monospace = [ "JetBrainsMono Nerd Font" ];
+      };
+      hinting = {
+        enable = true;
+        style = "full";
+      };
+      antialias = true;
+      subpixel = {
+        rgba = "rgb";
+      };
+    };
+  };
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.dates = "weekly";
@@ -139,5 +211,7 @@ in
   nix.gc.options = "--delete-older-than 10d";
   nix.settings.auto-optimise-store = true;
 
-  system.stateVersion = "25.05"; 
+  powerManagement.cpuFreqGovernor = "performance";
+
+  system.stateVersion = "25.05";
 }
