@@ -9,10 +9,12 @@ in
     (import "${home-manager}/nixos")
   ];
 
+  nixpkgs.config.allowUnfree = true;
+
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/disk/by-id/ata-ADATA_SU650_2M232L2GAEYC";
   boot.loader.grub.useOSProber = false;
-
+  
   boot.kernelParams = [
     "quiet"
     "splash"
@@ -41,7 +43,7 @@ in
     "vm.dirty_writeback_centisecs" = 100;
     "vm.compaction_proactiveness" = 5;
     "vm.vfs_cache_pressure" = 200;
-    "kernel.watchdog" = 0;
+    "kernel.watchdog" = 1;
     "kernel.nmi_watchdog" = 0;
     "kernel.printk" = "0 4 1 3";
     "kernel.randomize_va_space" = 2;
@@ -50,8 +52,6 @@ in
     "kernel.timer_migration" = 0;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [ mesa ];
@@ -128,8 +128,6 @@ in
   users.defaultUserShell = pkgs.zsh;
   environment.shells = with pkgs; [ zsh ];
 
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
     vim
     git
@@ -158,6 +156,20 @@ in
     libdrm
     xwayland
     mesa-demos
+    libvdpau
+    pavucontrol
+    xfce.thunar
+    xfce.tumbler
+    ffmpegthumbnailer
+    webp-pixbuf-loader
+    libmtp
+    mtpfs
+    jmtpfs
+    gvfs
+    grim
+    slurp
+    wl-clipboard
+    swappy
   ];
 
   fonts = {

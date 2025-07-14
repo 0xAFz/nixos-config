@@ -35,6 +35,9 @@ in
         in
         lib.mkOptionDefault {
           "${mod}+q" = "kill";
+          "Print" = ''
+            exec grim -g "$(slurp)" - | wl-copy
+          '';
         };
       input = {
         "*" = {
@@ -210,6 +213,9 @@ in
     dracula-theme
     dracula-icon-theme
     dconf
+    telegram-desktop
+    yt-dlp
+    ffmpeg_6
     # kubectl
   ];
 
