@@ -15,7 +15,8 @@ in
   boot.loader.grub.device = "/dev/disk/by-id/ata-ADATA_SU650_2M232L2GAEYC";
   boot.loader.grub.useOSProber = false;
 
-  boot.kernelPackages = pkgs.linuxKernel.kernels.linux_6_15;
+  # boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPackages = pkgs.linuxPackages_6_15;
 
   boot.kernelParams = [
     "quiet"
