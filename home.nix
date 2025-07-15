@@ -66,6 +66,7 @@ in
 
   home.packages = with pkgs; [
     # kubectl
+    telegram-desktop
   ];
 
   home.stateVersion = "25.05";
