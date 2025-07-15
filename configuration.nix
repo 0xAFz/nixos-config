@@ -61,7 +61,27 @@ in
   };
 
   services.xserver.enable = true;
+  services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
   services.xserver.videoDrivers = [ "radeon" ];
+
+  # environment.plasma6.excludePackages = with pkgs.kdePackages; [
+  #   konsole
+  # ];
+
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings = {
+      dns = [
+        "1.1.1.1"
+        "1.0.0.1"
+      ];
+      # log-driver = "journald";
+      # registry-mirrors = [ "https://mirror.gcr.io" ];
+      # storage-driver = "overlay2";
+    };
+  };
 
   networking.hostName = "nixos";
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -71,8 +91,6 @@ in
   time.timeZone = "Asia/Tehran";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  security.polkit.enable = true;
-
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -80,18 +98,6 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-  };
-
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-    extraPackages = with pkgs; [
-      wayland
-      xwayland
-      mesa
-      libglvnd
-      libdrm
-    ];
   };
 
   programs.zsh = {
@@ -141,7 +147,6 @@ in
     jq
     wget
     htop
-    docker
     google-chrome
     xkeyboard_config
     noto-fonts
@@ -157,22 +162,25 @@ in
     mesa
     libglvnd
     libdrm
-    xwayland
     mesa-demos
     libvdpau
-    pavucontrol
-    xfce.thunar
-    xfce.tumbler
-    ffmpegthumbnailer
-    webp-pixbuf-loader
-    libmtp
-    mtpfs
-    jmtpfs
-    gvfs
-    grim
-    slurp
-    wl-clipboard
-    swappy
+    bat
+    fastfetch
+    # terraform
+    ansible
+    go
+    rustup
+    vscode
+    neovim
+    nodejs_24
+    nixfmt-rfc-style
+    ghostty
+    ripgrep
+    python313
+    python313Packages.pip
+    dconf
+    yt-dlp
+    ffmpeg_6
   ];
 
   fonts = {
@@ -217,13 +225,13 @@ in
     };
   };
 
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.dates = "weekly";
+  system.autoUpgrade.enable = false;
+  system.autoUpgrade.dates = "monthly";
 
   nix.optimise.automatic = true;
-  nix.gc.automatic = true;
+  nix.gc.automatic = false;
   nix.gc.dates = "daily";
-  nix.gc.options = "--delete-older-than 10d";
+  nix.gc.options = "--delete-older-than 365d";
   nix.settings.auto-optimise-store = true;
 
   powerManagement.cpuFreqGovernor = "performance";
