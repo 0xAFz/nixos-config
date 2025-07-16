@@ -166,7 +166,6 @@ in
     libvdpau
     bat
     fastfetch
-    # terraform
     ansible
     go
     rustup
