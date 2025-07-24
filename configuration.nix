@@ -84,6 +84,8 @@ in
   };
 
   networking.hostName = "nixos";
+  networking.nameservers = [ "178.22.122.100" "185.51.200.2" "10.202.10.10" "10.202.10.11" "1.1.1.1" "8.8.8.8" ];
+  networking.networkmanager.insertNameservers = [ "178.22.122.100" "185.51.200.2" "10.202.10.10" "10.202.10.11" "1.1.1.1" "8.8.8.8" ];
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   networking.networkmanager.enable = true;
