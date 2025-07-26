@@ -61,6 +61,7 @@ in
       "workbench.startupEditor" = "none";
       "workbench.iconTheme" = "material-icon-theme";
       "workbench.editor.empty.hint" = "hidden";
+      "typescript.experimental.useTsgo" = true;
     };
   };
 
