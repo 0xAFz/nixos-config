@@ -35,6 +35,10 @@ in
     "schedstats=disable"
     "transparent_hugepage=never"
     "intel_pstate=disable"
+    "cgroup_disable=memory,pressure"
+    "cgroup.memory=nokmem,nosocket"
+    "workqueue.power_efficient=0"
+    "highres=on"
   ];
 
   boot.kernel.sysctl = {
@@ -42,8 +46,8 @@ in
     "vm.swappiness" = 0;
     "vm.dirty_ratio" = 2;
     "vm.dirty_background_ratio" = 1;
-    "vm.dirty_expire_centisecs" = 300;
-    "vm.dirty_writeback_centisecs" = 100;
+    "vm.dirty_expire_centisecs" = 50;
+    "vm.dirty_writeback_centisecs" = 10;
     "vm.compaction_proactiveness" = 5;
     "vm.vfs_cache_pressure" = 200;
     "kernel.watchdog" = 1;
