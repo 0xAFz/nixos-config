@@ -13,7 +13,11 @@ in
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/disk/by-id/ata-ADATA_SU650_2M232L2GAEYC";
+  # boot.loader.grub.device = "/dev/disk/by-uuid/58a7bc5c-7cbf-45c8-847e-2a4939bebcbc";
   boot.loader.grub.useOSProber = false;
+
+  boot.tmp.useTmpfs = true;
+  boot.tmp.tmpfsSize = "1G";
 
   # boot.kernelPackages = pkgs.linuxPackages_testing;
   boot.kernelPackages = pkgs.linuxPackages_6_15;
@@ -35,8 +39,6 @@ in
     "schedstats=disable"
     "transparent_hugepage=never"
     "intel_pstate=disable"
-    "cgroup_disable=memory,pressure"
-    "cgroup.memory=nokmem,nosocket"
     "workqueue.power_efficient=0"
     "highres=on"
   ];
@@ -44,11 +46,13 @@ in
   boot.kernel.sysctl = {
     "vm.stat_interval" = 120;
     "vm.swappiness" = 0;
+    "vm.overcommit_memory" = 0;
+    "vm.page_cluster" = 0;
     "vm.dirty_ratio" = 2;
     "vm.dirty_background_ratio" = 1;
     "vm.dirty_expire_centisecs" = 50;
     "vm.dirty_writeback_centisecs" = 10;
-    "vm.compaction_proactiveness" = 5;
+    "vm.compaction_proactiveness" = 100;
     "vm.vfs_cache_pressure" = 200;
     "kernel.watchdog" = 1;
     "kernel.nmi_watchdog" = 0;
@@ -75,7 +79,8 @@ in
   # ];
 
   virtualisation.docker = {
-    enable = true;
+    enable = false;
+    enableOnBoot = false;
     daemon.settings = {
       dns = [
         "1.1.1.1"
@@ -88,11 +93,13 @@ in
   };
 
   networking.hostName = "nixos";
-  networking.nameservers = [ "178.22.122.100" "185.51.200.2" "10.202.10.10" "10.202.10.11" "1.1.1.1" "8.8.8.8" ];
-  networking.networkmanager.insertNameservers = [ "178.22.122.100" "185.51.200.2" "10.202.10.10" "10.202.10.11" "1.1.1.1" "8.8.8.8" ];
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  networking.networkmanager.insertNameservers = [ "1.1.1.1" "8.8.8.8" ];
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   networking.networkmanager.enable = true;
+  networking.firewall.enable = false;
+  # networking.firewall.allowedTCPPortRanges = [ { from = 1024; to = 65535; } ];
 
   time.timeZone = "Asia/Tehran";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -186,6 +193,10 @@ in
     dconf
     yt-dlp
     ffmpeg_6
+    dnsutils
+    brave
+    tree
+    git-filter-repo
   ];
 
   fonts = {
