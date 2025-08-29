@@ -16,8 +16,8 @@ in
   # boot.loader.grub.device = "/dev/disk/by-uuid/58a7bc5c-7cbf-45c8-847e-2a4939bebcbc";
   boot.loader.grub.useOSProber = false;
 
-  boot.tmp.useTmpfs = true;
-  boot.tmp.tmpfsSize = "1G";
+  # boot.tmp.useTmpfs = true;
+  # boot.tmp.tmpfsSize = "1G";
 
   # boot.kernelPackages = pkgs.linuxPackages_testing;
   boot.kernelPackages = pkgs.linuxPackages_6_15;
