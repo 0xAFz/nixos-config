@@ -79,7 +79,7 @@ in
   # ];
 
   virtualisation.docker = {
-    enable = false;
+    enable = true;
     enableOnBoot = false;
     daemon.settings = {
       dns = [
